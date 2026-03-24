@@ -106,52 +106,57 @@ _MC = Multiple Choice, OE = Open Ended_
 
 ```json
 {
-    "userType": "Anxious Achiever",
-    "strengths": ["High standards", "Motivated"],
-    "challenges": ["Overwhelmed by pressure", "Difficulty prioritizing"],
-    "preferredTone": "Reassuring and structured",
-    "adviceStyle": "Step-by-step guidance with reassurance"
+    “userType”: “Anxious Achiever”,
+    “strengths”: [“High standards”, “Motivated”],
+    “challenges”: [“Overwhelmed by pressure”, “Difficulty prioritizing”],
+    “preferredTone”: “Reassuring and structured”,
+    “adviceStyle”: “Step-by-step guidance with reassurance”
 }
 ```
 
-5. Backend (Python / FastAPI or Flask)
-   5.1 Endpoints
+---
 
-POST /onboarding
+## 5. Backend (Python / FastAPI or Flask)
+
+### 5.1 Endpoints
+
+**POST /onboarding**
 
 Input: personality test answers
 
 Output: clarityProfile JSON
 
-POST /chat
+**POST /chat**
 
 Input:
 
+```json
 {
-"clarityProfile": {...},
-"sessionMessages": [
-{"sender": "user", "message": "..."},
-{"sender": "ai", "message": "..."},
-...
-]
+  “clarityProfile”: {...},
+  “sessionMessages”: [
+    {“sender”: “user”, “message”: “...”},
+    {“sender”: “ai”, “message”: “...”},
+    ...
+  ]
 }
+```
 
 Process:
-
-Construct system prompt using clarityProfile
-
-Append full sessionMessages for multi-turn context
-
-Send to LLM API (OpenAI GPT or equivalent)
-
-Return AI response
+- Construct system prompt using clarityProfile
+- Append full sessionMessages for multi-turn context
+- Send to LLM API (OpenAI GPT or equivalent)
+- Return AI response
 
 Output:
 
+```json
 {
-"aiMessage": "..."
+  “aiMessage”: “...”
 }
-5.2 System Prompt Template
+```
+
+### 5.2 System Prompt Template
+
 You are Unstuck, an AI clarity coach for college students.
 
 Personality Profile: [Insert clarityProfile summary]
@@ -166,32 +171,27 @@ Your instructions:
 6. Maintain coherence with previous messages in this session
 
 Conversation History:
-[Insert full sessionMessages] 6. Session Flow
+[Insert full sessionMessages]
 
-User completes personality test → backend returns clarityProfile
+---
 
-User enters chat interface
+## 6. Session Flow
 
-User sends first message → backend constructs prompt → AI responds
+- User completes personality test → backend returns clarityProfile
+- User enters chat interface
+- User sends first message → backend constructs prompt → AI responds
+- User sends follow-up messages → backend includes full sessionMessages → AI responds
+- Optional “Session Summary” button outputs concise recap with actionable advice
 
-User sends follow-up messages → backend includes full sessionMessages → AI responds
+---
 
-Optional “Session Summary” button outputs concise recap with actionable advice
+## 7. MVP Features
 
-7. MVP Features
-
-Personality test → actionable Clarity Profile
-
-Multi-turn, single-session chat
-
-AI provides:
-
-Acknowledgement
-
-Insight (behavioral pattern)
-
-One clear next step
-
-Tone aligned with personality
-
-Optional session summary
+- Personality test → actionable Clarity Profile
+- Multi-turn, single-session chat
+- AI provides:
+  - Acknowledgement
+  - Insight (behavioral pattern)
+  - One clear next step
+  - Tone aligned with personality
+- Optional session summary

@@ -46,12 +46,10 @@ The app will be at `http://localhost:8888`.
 
 ### Environment Variables
 
-| Variable | Description | Where to Set |
-|---|---|---|
-| `HF_API_TOKEN` | Hugging Face Inference API token | `frontend/.env.local` (local) or Netlify dashboard (production) |
-| `NEXT_PUBLIC_API_BASE` | Base URL for API calls | `frontend/.env.local` (local only; defaults to `/.netlify/functions` in production) |
-
-For Netlify deployment, set `HF_API_TOKEN` under **Site Settings → Environment Variables**.
+| Variable               | Description                      | Where to Set                       |
+| ---------------------- | -------------------------------- | ---------------------------------- |
+| `HF_API_TOKEN`         | Hugging Face Inference API token | `frontend/.env.local` (local)      |
+| `NEXT_PUBLIC_API_BASE` | Base URL for API calls           | `frontend/.env.local` (local only) |
 
 ### Project Structure
 

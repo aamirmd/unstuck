@@ -1,1 +1,5 @@
-tasks/*
+# Local Netlify folder
+.netlify
+
+# Other deployment info
+netlify.toml

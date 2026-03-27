@@ -142,7 +142,7 @@ Rules:
         client = InferenceClient(token=os.environ.get("HF_API_TOKEN"))
 
         response = client.chat_completion(
-            model="mistralai/Mistral-7B-Instruct-v0.3",
+            model="deepseek-ai/DeepSeek-V3.2:fireworks-ai",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},

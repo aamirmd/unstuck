@@ -102,6 +102,7 @@ def cors_response(status, body):
 
 
 def handler(event, context):
+    print("here")
     if event["httpMethod"] == "OPTIONS":
         return cors_response(200, "")
 

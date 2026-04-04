@@ -1,27 +1,9 @@
-import type { Handler, HandlerEvent } from "@netlify/functions";
 import { InferenceClient } from "@huggingface/inference";
+import type { ChatCompletionInputMessage } from "@huggingface/tasks";
+import { ChatMessage, ClarityProfile } from "@/lib/types";
 
 const FALLBACK_MESSAGE =
   "I'm having a moment — could you try sending that again? If it keeps happening, it might be a temporary issue on my end.";
-
-interface ClarityProfile {
-  threeWords?: string[];
-  strengths?: string[];
-  challenges?: string[];
-  preferredTone?: string;
-  adviceStyle?: string;
-  summary?: string;
-}
-
-interface SessionMessage {
-  sender: "user" | "ai";
-  message: string;
-}
-
-interface ChatMessage {
-  role: "system" | "user" | "assistant";
-  content: string;
-}
 
 function buildSystemPrompt(profile: ClarityProfile): string {
   const threeWords = profile.threeWords ?? ["Adaptable", "Curious", "Determined"];
@@ -50,7 +32,7 @@ Your instructions for EVERY response:
 2. Identify one behavioral pattern or insight connected to their personality (1–2 sentences)
 3. Give exactly ONE clear, actionable next step (specific and doable within 24 hours)
 4. Match your tone to their preferred tone: ${preferredTone}
-5. Keep responses concise — ideally 4–6 sentences total
+5. Keep responses concise — ideally 4-6 sentences total
 
 Rules:
 - Never give more than one action item per message
@@ -64,15 +46,15 @@ Rules:
 
 function buildMessageHistory(
   systemPrompt: string,
-  sessionMessages: SessionMessage[]
-): ChatMessage[] {
+  sessionMessages: ChatMessage[]
+): ChatCompletionInputMessage[] {
   const toRole = (sender: string): "user" | "assistant" =>
     sender === "user" ? "user" : "assistant";
 
   // Context window management: keep first 2 + last 16 if > 20 messages
   if (sessionMessages.length > 20) {
     const kept = [...sessionMessages.slice(0, 2), ...sessionMessages.slice(-16)];
-    const messages: ChatMessage[] = [{ role: "system", content: systemPrompt }];
+    const messages: ChatCompletionInputMessage[] = [{ role: "system", content: systemPrompt }];
 
     for (const msg of kept.slice(0, 2)) {
       messages.push({ role: toRole(msg.sender), content: msg.message });
@@ -87,7 +69,7 @@ function buildMessageHistory(
     return messages;
   }
 
-  const messages: ChatMessage[] = [{ role: "system", content: systemPrompt }];
+  const messages: ChatCompletionInputMessage[] = [{ role: "system", content: systemPrompt }];
   for (const msg of sessionMessages) {
     messages.push({ role: toRole(msg.sender), content: msg.message });
   }
@@ -95,34 +77,33 @@ function buildMessageHistory(
 }
 
 function corsResponse(status: number, body: string) {
-  return {
-    statusCode: status,
+  return new Response(body, {
+    status,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Content-Type": "application/json",
     },
-    body,
-  };
+  });
 }
 
-export const handler: Handler = async (event: HandlerEvent) => {
-  if (event.httpMethod === "OPTIONS") {
-    return corsResponse(200, "");
-  }
+export async function OPTIONS() {
+  return corsResponse(200, "");
+}
 
+export async function POST(request: Request) {
   try {
-    const body = JSON.parse(event.body ?? "{}");
+    const body = await request.json();
     const clarityProfile: ClarityProfile = body.clarityProfile;
-    const sessionMessages: SessionMessage[] = body.sessionMessages;
+    const sessionMessages: ChatMessage[] = body.sessionMessages;
 
     const systemPrompt = buildSystemPrompt(clarityProfile);
     const messages = buildMessageHistory(systemPrompt, sessionMessages);
 
     const client = new InferenceClient(process.env.HF_API_TOKEN);
     const response = await client.chatCompletion({
-      model: "deepseek-ai/DeepSeek-V3.2:fireworks-ai",
+      model: process.env.MODEL,
       messages,
       max_tokens: 600,
       temperature: 0.7,
@@ -134,4 +115,4 @@ export const handler: Handler = async (event: HandlerEvent) => {
     console.error("Error in chat handler:", e);
     return corsResponse(200, JSON.stringify({ aiMessage: FALLBACK_MESSAGE }));
   }
-};
+}

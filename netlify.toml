@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[functions]
+  directory = "frontend/netlify/functions"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[dev]
+  command = "cd frontend && npm run dev"
+
+# Environment variable: HF_API_TOKEN must be set in Netlify dashboard

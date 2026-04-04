@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Unstuck: An AI tool to turn chaos into clarity
 
-## Getting Started
+Web app: https://unstuck-ai.netlify.app/
 
-First, run the development server:
+---
+
+## MVP — Unstuck AI Clarity Coach
+
+Unstuck is a personalized AI coaching app for college students. Answer 10 quick personality questions, receive a custom Clarity Profile, then chat with an AI coach that adapts its tone, advice style, and insights to your unique patterns.
+
+### Tech Stack
+
+- **Frontend:** Next.js 15 (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- **Backend:** Next.js APIs
+- **LLM:** Hugging Face Inference API (free tier, `deepseek-ai/DeepSeek-V3.2-Exp`)
+- **State:** Zustand (client-side only, no persistence)
+- **Deployment:** Netlify
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.11+
+- Netlify CLI: `npm install -g netlify-cli`
+- Hugging Face API token (free at https://huggingface.co/settings/tokens)
+
+### Local Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Install frontend dependencies
+npm install
+
+# 2. Edit frontend/.env.local — replace hf_xxxx with your real HF token
+
+# 3. From repo root, run the full dev server (frontend + Python functions)
+netlify dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be at `http://localhost:8888`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable               | Description                      | Where to Set                       |
+| ---------------------- | -------------------------------- | ---------------------------------- |
+| `HF_API_TOKEN`         | Hugging Face Inference API token | `.env.local` (local)      |
+| `MODEL`         | Name of the model in use, along with inference provider | `.env.local` (local)      |
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+### Known Limitations
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- No session persistence — refreshing clears the conversation
+- No user accounts or authentication
+- HF free tier may have cold starts (10–30s on first request)
+- Profile quality depends on the open-source model's capabilitiesc
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## AI Tools & Technologies to be used in future versions
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **LLM API** – Core AI for personality-aware guidance and responses
+- **LangChain** – Orchestration for memory retrieval, response generation, and workflow
+- **Vector Database** – Semantic memory storage (Pinecone, Supabase embeddings)
+- **RAG (Retrieval-Augmented Generation)** – Retrieves user patterns to personalize advice

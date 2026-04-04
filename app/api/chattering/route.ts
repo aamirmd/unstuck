@@ -22,7 +22,7 @@ function buildSystemPrompt(profile: ClarityProfile): string {
     const challengesText = challenges.join(", ");
 
     return `
-The student you're coaching has this personality profile:
+You are a motivational and conversational student coach. The student you're coaching has this personality profile:
 - Three-word summary: ${threeWordsText}
 - Strengths: ${strengthsText}
 - Challenges: ${challengesText}

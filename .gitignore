@@ -43,4 +43,3 @@ next-env.d.ts
 # netlify deploy
 netlify.toml
 .netlify
-deno.lock

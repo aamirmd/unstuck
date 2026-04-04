@@ -13,7 +13,7 @@ export default function LandingPage() {
             Turn chaos into clarity
           </p>
           <p className="text-zinc-500 text-base leading-relaxed">
-            Answer 10 quick questions, and get a personalized AI coach that actually gets you.
+            Answer 8 quick questions, and get a personalized AI coach that actually gets you.
           </p>
         </div>
 

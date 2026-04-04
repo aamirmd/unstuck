@@ -7,7 +7,7 @@
 - Write detailed specs upfront to reduce ambiguity
 
 ## 2. Subagent Strategy
-- Use subagenets liberally to keep main context window clean
+- Use subagents liberally to keep main context window clean
 - Offload research, exploration, and parallel analysis to subagenets
 - For complex problems, throw more compute at it via subagenets
 - One task per subagent for focused execution

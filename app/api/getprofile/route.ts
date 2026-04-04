@@ -185,32 +185,32 @@ export async function POST(request: Request) {
   "summary": "2-3 sentence personality summary"
 }
 `;
-//         const systemPrompt = `You are a personality analysis engine for a student coaching app called Unstuck.
+        //         const systemPrompt = `You are a personality analysis engine for a student coaching app called Unstuck.
 
-// Given a student's answers to 8 personality questions, generate a Clarity Profile. The JSON must match this exact schema:
+        // Given a student's answers to 8 personality questions, generate a Clarity Profile. The JSON must match this exact schema:
 
-// {
-//   "threeWords": ["word1", "word2", "word3"],
-//   "strengths": ["strength1", "strength2"],
-//   "challenges": ["challenge1", "challenge2"],
-//   "preferredTone": "description of ideal coaching tone",
-//   "adviceStyle": "description of ideal advice delivery",
-//   "summary": "2-3 sentence personality summary"
-// }
+        // {
+        //   "threeWords": ["word1", "word2", "word3"],
+        //   "strengths": ["strength1", "strength2"],
+        //   "challenges": ["challenge1", "challenge2"],
+        //   "preferredTone": "description of ideal coaching tone",
+        //   "adviceStyle": "description of ideal advice delivery",
+        //   "summary": "2-3 sentence personality summary"
+        // }
 
-// Rules:
-// - "threeWords" must be exactly 3 single words that capture the student's core personality pattern (e.g., ["Reflective", "Cautious", "Perfectionist"])
-// - These 3 words are NOT restricted to any predefined types — generate them freely based on the answers
-// - "strengths" should be 2-3 genuine strengths implied by the answers
-// - "challenges" should be 2-3 growth areas implied by the answers
-// - "preferredTone" should match question 8 and the open-ended answers
-// - "adviceStyle" should match question 10 and the overall pattern
-// - "summary" should be warm, direct, and written in second person ("You tend to...")
-// - Do NOT use clinical or diagnostic language
-// - Keep everything actionable and empowering
+        // Rules:
+        // - "threeWords" must be exactly 3 single words that capture the student's core personality pattern (e.g., ["Reflective", "Cautious", "Perfectionist"])
+        // - These 3 words are NOT restricted to any predefined types — generate them freely based on the answers
+        // - "strengths" should be 2-3 genuine strengths implied by the answers
+        // - "challenges" should be 2-3 growth areas implied by the answers
+        // - "preferredTone" should match question 8 and the open-ended answers
+        // - "adviceStyle" should match question 10 and the overall pattern
+        // - "summary" should be warm, direct, and written in second person ("You tend to...")
+        // - Do NOT use clinical or diagnostic language
+        // - Keep everything actionable and empowering
 
-// Your response must only include valid JSON. 
-// `;
+        // Your response must only include valid JSON.
+        // `;
 
         const userPrompt = `Here are the student's answers:\n\n${answersText}\n\n`;
         // const userPrompt = `Here are the student's answers:\n\n${answersText}\n\nGenerate the Clarity Profile JSON.`;
@@ -226,7 +226,6 @@ export async function POST(request: Request) {
             temperature: 0.7,
         });
 
-        console.log(response.choices[0].message.content)
         const aiText = response.choices[0].message.content ?? "";
         const profile = parseJsonResponse(aiText);
 

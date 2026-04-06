@@ -49,14 +49,14 @@ export default function SessionSummary() {
 
       {isOpen && summaryText && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <Card className="max-w-lg w-full rounded-2xl border-zinc-100 shadow-xl">
+          <Card className="max-w-lg bg-white w-full rounded-2xl border-zinc-100 shadow-xl">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base font-semibold text-zinc-900">
                   Session Summary
                 </CardTitle>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {setIsOpen(false); setSummaryText("");}}
                   className="text-zinc-400 hover:text-zinc-700 text-sm"
                 >
                   ✕

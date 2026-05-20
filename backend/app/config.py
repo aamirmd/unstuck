@@ -1,10 +1,14 @@
 from pydantic_settings import BaseSettings
+from pydantic import SecretStr
 
 
 class Settings(BaseSettings):
     APP_NAME: str = "Unstuck API"
     DEBUG: bool = True
-    TEST: str
+
+    # Secret keys
+    HF_API_TOKEN: SecretStr
+    MODEL: SecretStr
 
     class Config:
         env_file = ".env"

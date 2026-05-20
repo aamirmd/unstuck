@@ -40,6 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# netlify deploy
+# netlify
 netlify.toml
 .netlify
+deno.lock
+
+# Python
+__pycache__

@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     APP_NAME: str = "Unstuck API"
     DEBUG: bool = True
+    TEST: str
 
     class Config:
         env_file = ".env"

@@ -5,6 +5,7 @@ import json
 import re
 
 from app.config import settings
+from app.models.types import Answer, ClarityProfile
 
 router = APIRouter()
 
@@ -40,22 +41,8 @@ FALLBACK_PROFILE = {
 }
 
 
-class Answer(BaseModel):
-    questionId: int
-    value: str
-
-
 class ProfileRequest(BaseModel):
     answers: list[Answer]
-
-
-class ClarityProfile(BaseModel):
-    threeWords: list[str]
-    strengths: list[str]
-    challenges: list[str]
-    preferredTone: str
-    adviceStyle: str
-    summary: str
 
 
 class ProfileResponse(BaseModel):

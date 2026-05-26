@@ -3,25 +3,11 @@ from pydantic import BaseModel
 from huggingface_hub import InferenceClient
 
 from app.config import settings
+from app.models.types import ChatMessage, ClarityProfile
 
 router = APIRouter()
 
 FALLBACK_MESSAGE = "I'm having a moment — could you try sending that again? If it keeps happening, it might be a temporary issue on my end."
-
-
-class ClarityProfile(BaseModel):
-    threeWords: list[str]
-    strengths: list[str]
-    challenges: list[str]
-    preferredTone: str
-    adviceStyle: str
-    summary: str
-
-
-class ChatMessage(BaseModel):
-    sender: str  # "user" or "ai"
-    message: str
-    timestamp: float | None = None
 
 
 class ChatRequest(BaseModel):

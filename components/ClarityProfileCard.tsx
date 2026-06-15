@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ClarityProfile } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 interface ClarityProfileCardProps {
     profile: ClarityProfile;

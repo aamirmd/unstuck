@@ -47,3 +47,6 @@ deno.lock
 
 # python
 __pycache__
+
+# other
+notes

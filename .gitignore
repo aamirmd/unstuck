@@ -45,5 +45,8 @@ netlify.toml
 .netlify
 deno.lock
 
-# Python
+# python
 __pycache__
+
+# other
+notes

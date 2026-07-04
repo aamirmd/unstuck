@@ -1,7 +1,6 @@
 import { Answer, ClarityProfile, ChatMessage } from "./types";
 
-// const API_BASE = process.env.BACKEND_URL || "";
-const API_BASE = "http://localhost:8000/api/v1";
+const API_BASE = "/api";
 
 export async function generateProfile(
     answers: Answer[],

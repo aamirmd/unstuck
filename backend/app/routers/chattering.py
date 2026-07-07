@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from huggingface_hub import InferenceClient
+from openai import OpenAI
 
 from app.config import settings
 from app.models.types import ChatMessage, ClarityProfile
@@ -79,8 +79,11 @@ async def chattering(body: ChatRequest) -> ChatResponse:
         system_prompt = build_system_prompt(body.clarityProfile)
         messages = build_message_history(system_prompt, body.sessionMessages)
 
-        client = InferenceClient(token=settings.HF_API_TOKEN.get_secret_value())
-        response = client.chat_completion(
+        client = OpenAI(
+            base_url="https://router.huggingface.co/v1",
+            api_key=settings.HF_API_TOKEN.get_secret_value(),
+        )
+        response = client.chat.completions.create(
             model=settings.MODEL.get_secret_value(),
             messages=messages,
             max_tokens=600,

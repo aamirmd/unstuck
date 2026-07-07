@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from huggingface_hub import InferenceClient
+from openai import OpenAI
 import json
 import re
 
@@ -111,8 +111,11 @@ Generate a Clarity Profile in this JSON format without explaining your approach 
 }"""
         user_prompt = f"Here are the student's answers: {answers_text}"
 
-        client = InferenceClient(token=settings.HF_API_TOKEN.get_secret_value())
-        response = client.chat_completion(
+        client = OpenAI(
+            base_url="https://router.huggingface.co/v1",
+            api_key=settings.HF_API_TOKEN.get_secret_value(),
+        )
+        response = client.chat.completions.create(
             model=settings.MODEL.get_secret_value(),
             messages=[
                 {"role": "system", "content": system_prompt},

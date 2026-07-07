@@ -39,11 +39,10 @@ The app will be at `http://localhost:8888`.
 
 ### Environment Variables
 
-| Variable               | Description                      | Where to Set                       |
-| ---------------------- | -------------------------------- | ---------------------------------- |
-| `HF_API_TOKEN`         | Hugging Face Inference API token | `.env.local` (local)      |
-| `MODEL`         | Name of the model in use, along with inference provider | `.env.local` (local)      |
-
+| Variable       | Description                                             | Where to Set         |
+| -------------- | ------------------------------------------------------- | -------------------- |
+| `HF_API_TOKEN` | Hugging Face Inference API token                        | `.env.local` (local) |
+| `MODEL`        | Name of the model in use, along with inference provider | `.env.local` (local) |
 
 ### Known Limitations
 
@@ -58,3 +57,10 @@ The app will be at `http://localhost:8888`.
 - **LangChain** – Orchestration for memory retrieval, response generation, and workflow
 - **Vector Database** – Semantic memory storage (Pinecone, Supabase embeddings)
 - **RAG (Retrieval-Augmented Generation)** – Retrieves user patterns to personalize advice
+
+## Credits
+
+### Research papers used to create RAG Knowledge Base
+
+- Understanding personal productivity. [See here](https://dl.acm.org/doi/epdf/10.1145/3290605.3300845).
+- Boosting productivity and well-being through time management. [See here](https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2025.1623228/full)

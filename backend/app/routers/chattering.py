@@ -19,6 +19,12 @@ class ChatResponse(BaseModel):
     aiMessage: str
 
 
+def retrieve_relevant_techniques(profile: ClarityProfile) -> str:
+    # Placeholder: will query a vector DB for productivity techniques
+    # relevant to the user's clarity profile.
+    return ""
+
+
 def build_system_prompt(profile: ClarityProfile) -> str:
     three_words_text = ", ".join(profile.threeWords or ["Adaptable", "Curious", "Determined"])
     strengths_text = ", ".join(profile.strengths or [])
@@ -26,9 +32,10 @@ def build_system_prompt(profile: ClarityProfile) -> str:
     preferred_tone = profile.preferredTone or "Warm and encouraging"
     advice_style = profile.adviceStyle or "One clear step at a time"
     summary = profile.summary or ""
+    relevant_techniques = retrieve_relevant_techniques(profile)
 
     return f"""\
-You are a motivational and conversational student coach. The student you're coaching has this personality profile:
+You are a motivational and conversational productivity coach. The person you're coaching has this personality profile:
 - Three-word summary: {three_words_text}
 - Strengths: {strengths_text}
 - Challenges: {challenges_text}
@@ -36,8 +43,10 @@ You are a motivational and conversational student coach. The student you're coac
 - Preferred advice style: {advice_style}
 - Profile summary: {summary}
 
+These are some helpful productivity techniques to use when coaching the person: {relevant_techniques}
+
 Your instructions for EVERY response:
-1. Acknowledge what the student just said, if needed (1 sentence, show you heard them)
+1. Acknowledge what the they just said, if needed (1 sentence, show you heard them)
 2. Identify one behavioral pattern or insight connected to their personality (1–2 sentences)
 3. Give exactly ONE clear, actionable next step (specific and doable within 24 hours)
 4. Match your tone to their preferred tone: {preferred_tone}
@@ -47,10 +56,10 @@ Rules:
 - Never give more than one action item per message
 - Never use clinical or therapeutic language
 - Never say "As an AI..." or break character
-- If the student seems stuck, ask ONE clarifying question instead of giving advice
+- If the person seems stuck, ask ONE clarifying question instead of giving advice
 - Reference their strengths when encouraging them
 - Reference their challenges compassionately, never judgmentally
-- If the student goes off topic, gently redirect to their goals"""
+- If the person goes off topic, gently redirect to their goals"""
 
 
 def build_message_history(system_prompt: str, session_messages: list[ChatMessage]) -> list[dict]:

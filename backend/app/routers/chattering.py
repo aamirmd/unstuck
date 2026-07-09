@@ -4,6 +4,7 @@ from openai import OpenAI
 
 from app.config import settings
 from app.models.types import ChatMessage, ClarityProfile
+from app.services.vector_store import query_techniques
 
 router = APIRouter()
 
@@ -20,9 +21,8 @@ class ChatResponse(BaseModel):
 
 
 def retrieve_relevant_techniques(profile: ClarityProfile) -> str:
-    # Placeholder: will query a vector DB for productivity techniques
-    # relevant to the user's clarity profile.
-    return ""
+    query = ", ".join(profile.challenges or []) + " " + (profile.summary or "")
+    return query_techniques(query.strip())
 
 
 def build_system_prompt(profile: ClarityProfile) -> str:

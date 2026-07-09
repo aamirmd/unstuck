@@ -48,29 +48,29 @@ Once the server is running, you can access:
 
 ### Top-level files
 
-| File | Purpose |
-|---|---|
-| `app/__init__.py` | Package marker — makes `app` a Python package |
-| `app/config.py` | Loads env vars (`HF_API_TOKEN`, `MODEL`, `APP_NAME`, `DEBUG`) from `.env` via Pydantic's `BaseSettings`. Exports a `settings` singleton used throughout |
-| `app/dependencies.py` | Placeholder for FastAPI dependency injection functions (currently unused) |
-| `app/main.py` | App entry point — creates the `FastAPI` instance, adds CORS middleware (allows all origins), and mounts three routers: `health`, `getprofile`, and `chattering` |
+| File                  | Purpose                                                                                                                                                         |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/__init__.py`     | Package marker — makes `app` a Python package                                                                                                                   |
+| `app/config.py`       | Loads env vars (`HF_API_TOKEN`, `MODEL`, `APP_NAME`, `DEBUG`) from `.env` via Pydantic's `BaseSettings`. Exports a `settings` singleton used throughout         |
+| `app/dependencies.py` | Placeholder for FastAPI dependency injection functions (currently unused)                                                                                       |
+| `app/main.py`         | App entry point — creates the `FastAPI` instance, adds CORS middleware (allows all origins), and mounts three routers: `health`, `getprofile`, and `chattering` |
 
 ### `app/models/`
 
 Shared Pydantic data models used across routers:
 
-| File | Purpose |
-|---|---|
+| File       | Purpose                                                                                                                                                                                       |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `types.py` | Defines three models: `ClarityProfile` (AI-generated personality profile), `Answer` (quiz answer with question ID + value), `ChatMessage` (a chat turn with sender, text, optional timestamp) |
 
 ### `app/routers/`
 
 Each file is a FastAPI router handling a specific endpoint group:
 
-| File | Purpose |
-|---|---|
-| `health.py` | `GET /health` — simple liveness check returning `{"status": "ok"}` |
-| `getprofile.py` | `POST /getprofile` — accepts quiz answers, sends them to a Hugging Face LLM, and returns a `ClarityProfile`. Includes robust JSON parsing with fallbacks and a hardcoded fallback profile if the AI call fails |
+| File            | Purpose                                                                                                                                                                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `health.py`     | `GET /health` — simple liveness check returning `{"status": "ok"}`                                                                                                                                                                           |
+| `getprofile.py` | `POST /getprofile` — accepts quiz answers, sends them to a Hugging Face LLM, and returns a `ClarityProfile`. Includes robust JSON parsing with fallbacks and a hardcoded fallback profile if the AI call fails                               |
 | `chattering.py` | `POST /chattering` — accepts a `ClarityProfile` + chat history, builds a personalized coach system prompt, calls the Hugging Face LLM, and returns the AI reply. Trims message history to 2 + last 16 messages when sessions exceed 20 turns |
 
 ### `app/services/`

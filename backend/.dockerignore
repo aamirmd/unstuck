@@ -6,4 +6,5 @@ requirements-dev.txt
 .git
 notes/
 .pytest_cache
-data/
+data/*.md
+data/*.pdf

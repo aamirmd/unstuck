@@ -22,7 +22,7 @@ class ChatResponse(BaseModel):
 
 def retrieve_relevant_techniques(profile: ClarityProfile) -> str:
     query = ", ".join(profile.challenges or []) + " " + (profile.summary or "")
-    return query_techniques(query.strip())
+    return query_techniques(query.strip(), n_results=10)
 
 
 def build_system_prompt(profile: ClarityProfile) -> str:
@@ -86,6 +86,7 @@ def build_message_history(system_prompt: str, session_messages: list[ChatMessage
 async def chattering(body: ChatRequest) -> ChatResponse:
     try:
         system_prompt = build_system_prompt(body.clarityProfile)
+        print(system_prompt)
         messages = build_message_history(system_prompt, body.sessionMessages)
 
         client = OpenAI(

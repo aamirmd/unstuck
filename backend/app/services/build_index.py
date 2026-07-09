@@ -8,9 +8,9 @@ import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from langchain_text_splitters import Language, RecursiveCharacterTextSplitter
 
-from app.config import settings
+# from app.config import settings
 
-DATA_DIR = Path(settings.DATA_DIR)
+DATA_DIR = Path("data")
 CHROMA_DB_PATH = str(DATA_DIR / "chroma_db")
 COLLECTION_NAME = "productivity_techniques"
 

@@ -86,7 +86,6 @@ def build_message_history(system_prompt: str, session_messages: list[ChatMessage
 async def chattering(body: ChatRequest) -> ChatResponse:
     try:
         system_prompt = build_system_prompt(body.clarityProfile)
-        print(system_prompt)
         messages = build_message_history(system_prompt, body.sessionMessages)
 
         client = OpenAI(

@@ -1,7 +1,4 @@
 """Read-only queries against the persistent Chroma vector DB built by build_index.py."""
-import chromadb
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
-
 from app.services.build_index import CHROMA_DB_PATH, COLLECTION_NAME
 
 _collection = None
@@ -13,6 +10,9 @@ def _get_collection():
         return _collection
 
     try:
+        import chromadb
+        from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+
         client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
         _collection = client.get_collection(
             name=COLLECTION_NAME, embedding_function=SentenceTransformerEmbeddingFunction()

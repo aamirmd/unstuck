@@ -4,26 +4,26 @@ Run with: python -m app.services.build_index
 """
 from pathlib import Path
 
-import chromadb
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
-from langchain_text_splitters import Language, RecursiveCharacterTextSplitter
-
 # from app.config import settings
 
 DATA_DIR = Path("data")
 CHROMA_DB_PATH = str(DATA_DIR / "chroma_db")
 COLLECTION_NAME = "productivity_techniques"
 
-_splitter = RecursiveCharacterTextSplitter.from_language(
-    language=Language.MARKDOWN, chunk_size=500, chunk_overlap=50
-)
-
 
 def chunk_markdown(text: str) -> list[str]:
-    return _splitter.split_text(text)
+    from langchain_text_splitters import Language, RecursiveCharacterTextSplitter
+
+    splitter = RecursiveCharacterTextSplitter.from_language(
+        language=Language.MARKDOWN, chunk_size=500, chunk_overlap=50
+    )
+    return splitter.split_text(text)
 
 
 def build_index() -> None:
+    import chromadb
+    from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+
     md_files = sorted(DATA_DIR.glob("*.md"))
     if not md_files:
         print(f"No .md files found in {DATA_DIR}")

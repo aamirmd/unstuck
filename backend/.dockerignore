@@ -6,4 +6,3 @@ requirements-dev.txt
 .git
 notes/
 .pytest_cache
-data/chroma_db

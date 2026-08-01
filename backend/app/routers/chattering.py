@@ -1,9 +1,10 @@
+import uuid
+
 from fastapi import APIRouter
 from pydantic import BaseModel
-from openai import OpenAI
 
-from app.config import settings
 from app.models.types import ChatMessage, ClarityProfile
+from app.services.chat_agent import run_chat_agent
 from app.services.vector_store import query_techniques
 
 router = APIRouter()
@@ -14,10 +15,13 @@ FALLBACK_MESSAGE = "I'm having a moment — could you try sending that again? If
 class ChatRequest(BaseModel):
     clarityProfile: ClarityProfile
     sessionMessages: list[ChatMessage]
+    sessionId: str | None = None
 
 
 class ChatResponse(BaseModel):
     aiMessage: str
+    sessionId: str
+    calendarReady: bool = False
 
 
 def retrieve_relevant_techniques(profile: ClarityProfile) -> str:
@@ -62,11 +66,11 @@ Rules:
 - If the person goes off topic, gently redirect to their goals"""
 
 
-def build_message_history(system_prompt: str, session_messages: list[ChatMessage]) -> list[dict]:
+def build_message_history(session_messages: list[ChatMessage]) -> list[dict]:
     def to_role(sender: str) -> str:
         return "user" if sender == "user" else "assistant"
 
-    messages = [{"role": "system", "content": system_prompt}]
+    messages: list[dict] = []
 
     if len(session_messages) > 20:
         kept = session_messages[:2] + session_messages[-16:]
@@ -84,24 +88,15 @@ def build_message_history(system_prompt: str, session_messages: list[ChatMessage
 
 @router.post("/chattering", response_model=ChatResponse)
 async def chattering(body: ChatRequest) -> ChatResponse:
+    session_id = body.sessionId or str(uuid.uuid4())
+
     try:
         system_prompt = build_system_prompt(body.clarityProfile)
-        messages = build_message_history(system_prompt, body.sessionMessages)
+        messages = build_message_history(body.sessionMessages)
 
-        client = OpenAI(
-            base_url="https://router.huggingface.co/v1",
-            api_key=settings.HF_API_TOKEN.get_secret_value(),
-        )
-        response = client.chat.completions.create(
-            model=settings.MODEL.get_secret_value(),
-            messages=messages,
-            max_tokens=600,
-            temperature=0.7,
-        )
-
-        ai_text = response.choices[0].message.content or ""
-        return ChatResponse(aiMessage=ai_text)
+        ai_text, calendar_ready = await run_chat_agent(system_prompt, messages, session_id)
+        return ChatResponse(aiMessage=ai_text, sessionId=session_id, calendarReady=calendar_ready)
 
     except Exception as e:
         print(f"Error in chattering handler: {e}")
-        return ChatResponse(aiMessage=FALLBACK_MESSAGE)
+        return ChatResponse(aiMessage=FALLBACK_MESSAGE, sessionId=session_id)

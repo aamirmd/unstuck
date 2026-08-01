@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from app.config import settings
-from app.routers import health, getprofile, chattering
+from app.routers import health, getprofile, chattering, calendar
 
 app = FastAPI(
     title=settings.APP_NAME, 
@@ -29,3 +29,4 @@ app.add_middleware(
 app.include_router(health.router, prefix='/api/v1')
 app.include_router(getprofile.router, prefix='/api/v1')
 app.include_router(chattering.router, prefix='/api/v1')
+app.include_router(calendar.router, prefix='/api/v1')

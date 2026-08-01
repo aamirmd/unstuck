@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/lib/store";
-import { sendMessage } from "@/lib/api";
+import { sendMessage, getCalendarDownloadUrl } from "@/lib/api";
 import ChatWindow from "@/components/ChatWindow";
 import ClarityProfileCard from "@/components/ClarityProfileCard";
 import SessionSummary from "@/components/SessionSummary";
@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function ChatPage() {
   const router = useRouter();
-  const { clarityProfile, addMessage, isLoading, setIsLoading, sessionMessages } =
+  const { clarityProfile, addMessage, isLoading, setIsLoading, sessionMessages, sessionId, setSessionId } =
     useAppStore();
   const [input, setInput] = useState("");
   const initialized = useRef(false);
@@ -50,8 +50,14 @@ export default function ChatPage() {
 
     try {
       const updatedMessages = [...sessionMessages, userMsg];
-      const aiText = await sendMessage(clarityProfile, updatedMessages);
-      addMessage({ sender: "ai", message: aiText, timestamp: Date.now() });
+      const result = await sendMessage(clarityProfile, updatedMessages, sessionId);
+      setSessionId(result.sessionId);
+      addMessage({
+        sender: "ai",
+        message: result.aiMessage,
+        timestamp: Date.now(),
+        downloadUrl: result.calendarReady ? getCalendarDownloadUrl(result.sessionId) : undefined,
+      });
     } catch (err) {
       console.error(err);
       addMessage({

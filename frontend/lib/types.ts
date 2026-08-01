@@ -13,6 +13,7 @@ export interface ChatMessage {
     sender: "user" | "ai";
     message: string;
     timestamp?: number;
+    downloadUrl?: string;
 }
 
 // Onboarding answer
@@ -33,8 +34,11 @@ export interface OnboardingResponse {
 export interface ChatRequest {
     clarityProfile: ClarityProfile;
     sessionMessages: ChatMessage[];
+    sessionId?: string | null;
 }
 
 export interface ChatResponse {
     aiMessage: string;
+    sessionId: string;
+    calendarReady: boolean;
 }

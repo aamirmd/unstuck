@@ -17,6 +17,8 @@ interface AppState {
   addMessage: (msg: ChatMessage) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  sessionId: string | null;
+  setSessionId: (id: string) => void;
 
   // Reset
   resetSession: () => void;
@@ -51,6 +53,8 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => ({ sessionMessages: [...state.sessionMessages, msg] })),
   isLoading: false,
   setIsLoading: (loading: boolean) => set({ isLoading: loading }),
+  sessionId: null,
+  setSessionId: (id: string) => set({ sessionId: id }),
 
   // Reset
   resetSession: () =>
@@ -59,5 +63,6 @@ export const useAppStore = create<AppState>((set) => ({
       sessionMessages: [],
       answers: [],
       currentStep: 0,
+      sessionId: null,
     }),
 }));

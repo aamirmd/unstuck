@@ -1,6 +1,7 @@
 "use client";
 
 import { ChatMessage } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 interface ChatBubbleProps {
   message: ChatMessage;
@@ -39,6 +40,15 @@ export default function ChatBubble({ message }: ChatBubbleProps) {
           message.message
         ) : (
           <span>{renderMarkdown(message.message)}</span>
+        )}
+        {message.downloadUrl && (
+          <div className="mt-2">
+            <Button asChild variant="outline" size="sm">
+              <a href={message.downloadUrl} download>
+                Download calendar (.ics)
+              </a>
+            </Button>
+          </div>
         )}
       </div>
     </div>

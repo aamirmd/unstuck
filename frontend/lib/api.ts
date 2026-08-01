@@ -19,13 +19,18 @@ export async function generateProfile(
 export async function sendMessage(
     clarityProfile: ClarityProfile,
     sessionMessages: ChatMessage[],
-): Promise<string> {
+    sessionId: string | null,
+): Promise<{ aiMessage: string; sessionId: string; calendarReady: boolean }> {
     const res = await fetch(`${API_BASE}/chattering`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clarityProfile, sessionMessages }),
+        body: JSON.stringify({ clarityProfile, sessionMessages, sessionId }),
     });
     if (!res.ok) throw new Error("Chat request failed");
     const data = await res.json();
-    return data.aiMessage;
+    return data;
+}
+
+export function getCalendarDownloadUrl(sessionId: string): string {
+    return `${API_BASE}/calendar/${sessionId}/plan.ics`;
 }
